@@ -3,12 +3,30 @@ var path = require('path');
 var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
+var expressValidator = require('express-validator');
 var db = require('./db/db');
 var register = require('./routes/register');
 var login = require('./routes/login');
 var tweets = require('./routes/tweets');
 
 var app = express();
+
+app.use(expressValidator({
+    errorFormatter: function(param, msg, value) {
+        var namespace = param.split('.')
+            , root    = namespace.shift()
+            , formParam = root;
+
+        while(namespace.length) {
+            formParam += '[' + namespace.shift() + ']';
+        }
+        return {
+            param : formParam,
+            msg   : msg,
+            value : value
+        };
+    }
+}));
 
 app.use(logger('dev'));
 app.use(bodyParser.json());
