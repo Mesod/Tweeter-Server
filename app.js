@@ -34,13 +34,7 @@ app.use(function(err, req, res, next) {
 
   // render the error page
   res.status(err.status || 500);
-  res.render('error');
-});
-
-
-db.on('error', console.error.bind(console, 'connection error:'));
-db.once('open', function() {
-    console.log("connected!");
+  res.json({status:'error'});
 });
 
 module.exports = app;
