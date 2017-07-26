@@ -3,7 +3,7 @@ var path = require('path');
 var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
-
+var db = require('./db/db');
 var register = require('./routes/register');
 var login = require('./routes/login');
 var tweets = require('./routes/tweets');
@@ -38,12 +38,9 @@ app.use(function(err, req, res, next) {
 });
 
 
-var mongoose = require('mongoose');
-mongoose.connect('mongodb://localhost/test');
-var db = mongoose.connection;
 db.on('error', console.error.bind(console, 'connection error:'));
 db.once('open', function() {
-    console.log('connected!');
+    console.log("connected!");
 });
 
 module.exports = app;
