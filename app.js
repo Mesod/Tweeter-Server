@@ -4,8 +4,9 @@ var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 
-var index = require('./routes/register');
-var users = require('./routes/login');
+var register = require('./routes/register');
+var login = require('./routes/login');
+var tweets = require('./routes/tweets');
 
 var app = express();
 
@@ -14,8 +15,9 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
 
-app.use('/', index);
-app.use('/users', users);
+app.use('/api/register', register);
+app.use('/api/login', login);
+app.use('/api/tweets', tweets);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
@@ -33,6 +35,15 @@ app.use(function(err, req, res, next) {
   // render the error page
   res.status(err.status || 500);
   res.render('error');
+});
+
+
+var mongoose = require('mongoose');
+mongoose.connect('mongodb://localhost/test');
+var db = mongoose.connection;
+db.on('error', console.error.bind(console, 'connection error:'));
+db.once('open', function() {
+    console.log('connected!');
 });
 
 module.exports = app;
