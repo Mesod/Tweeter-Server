@@ -14,6 +14,7 @@ var uniqueUserName = function(username,callback) {
     })
 }
 
+//we could define this module for user schema too, one of the good things of schemas are this ability of defining methods
 module.exports.newUser = function(userInfo, callback) {
     uniqueUserName(userInfo.userName,function(bool) {
         if(bool) {
@@ -33,3 +34,19 @@ module.exports.newUser = function(userInfo, callback) {
 
 }
 
+//TODO: 1- getUserByUsername    2- comparePassword
+
+module.exports.getUserByUsername = function(username, callback) {
+    var query = {userName: username};
+    User.findOne(query, callback);
+}
+
+module.exports.comparePassword = function(candidatePassword, hash, callback){
+    bcrypt.compare(candidatePassword, hash, function(err, isMatch){
+        callback(null, isMatch);
+    });
+}
+
+module.exports.getUserById = function(id, callback) {
+    User.findById(id, callback);
+}
