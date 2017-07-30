@@ -39,7 +39,7 @@ const jwtOptions = {
 const jwtLogin = new JwtStrategy(jwtOptions, function(payload, done) {
     User.getUserById(payload._id, function(err, user) {
         if (err) { return done(err, false); }
-
+        console.log(user);
         if (user) {
             done(null, user);
         } else {
