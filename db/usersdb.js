@@ -14,6 +14,8 @@ var uniqueUserName = function(username,callback) {
     })
 }
 
+module.exports.user = userSchema;
+
 //we could define this module for user schema too, one of the good things of schemas are this ability of defining methods
 module.exports.newUser = function(userInfo, callback) {
     uniqueUserName(userInfo.userName,function(bool) {
@@ -38,7 +40,7 @@ module.exports.newUser = function(userInfo, callback) {
 
 module.exports.getUserByUsername = function(username, callback) {
     var query = {userName: username};
-    User.findOne(query, callback);
+    userSchema.findOne(query, callback);
 }
 
 module.exports.comparePassword = function(candidatePassword, hash, callback){
@@ -48,5 +50,5 @@ module.exports.comparePassword = function(candidatePassword, hash, callback){
 }
 
 module.exports.getUserById = function(id, callback) {
-    User.findById(id, callback);
+    userSchema.findById(id, callback);
 }

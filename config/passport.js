@@ -10,7 +10,7 @@ const   passport        = require('passport'),
 
 //PASSPORT SETUP
 
-const localOptions = { usernameField: 'userName' };
+const localOptions = { usernamenlField: 'userName' };
 
 const localLogin = new LocalStrategy(localOptions, function(username, password, done) {
     User.getUserByUsername(username, function(err, user) {
