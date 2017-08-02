@@ -33,8 +33,18 @@ router.get('/getUsersOwnPosts',requireAuth, function(req,res) {
     });
 });
 
-router.get('/likeAPost', requireAuth, function(req,res) {
-
+router.get('/like/:tweetId', requireAuth, function(req,res) {
+    var id = req.params.tweetId;
+    // console.log(id);
+    tdb.likeTweet(req.user.userName,id,function(err){
+        if(err) {
+            res.json({"status":"error","error":err});
+            res.end();
+        } else {
+            res.json({"status":"success"});
+            res.end();
+        }
+    })
 });
 
 module.exports = router;
