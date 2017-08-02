@@ -20,7 +20,7 @@ module.exports.user = userSchema;
 module.exports.newUser = function(userInfo, callback) {
     uniqueUserName(userInfo.userName,function(bool) {
         if(bool) {
-            console.log('runs here');
+            // console.log('runs here');
             var tempUser = new userSchema(userInfo);
             bcrypt.genSalt(10,function(err,salt) {
                 bcrypt.hash(tempUser.password,salt,function(err,hash) {
@@ -29,7 +29,7 @@ module.exports.newUser = function(userInfo, callback) {
                 })
             })
         } else {
-            console.log('runs 2');
+            // console.log('runs 2');
             callback("invalid username!");
         }
     })
