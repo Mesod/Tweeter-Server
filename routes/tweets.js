@@ -47,4 +47,17 @@ router.get('/like/:tweetId', requireAuth, function(req,res) {
     })
 });
 
+router.get('/dislike/:tweetId', requireAuth, function (req,res) {
+    var id = req.params.tweetId;
+    tdb.unlikeTweet(req.user.userName,id,function(err) {
+        if(err) {
+            res.json({"status":"error","error":err});
+
+        } else {
+            res.json({"status":"success"});
+        }
+        res.end();
+    });
+})
+
 module.exports = router;

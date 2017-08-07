@@ -33,3 +33,34 @@ module.exports.likeTweet = function(username, tweetId, cb) {
         }
     })
 };
+
+module.exports.unlikeTweet = function (username, tweetId, cb) {
+    Tweet.findById(tweetId,function(err,t) {
+        if(err) {
+            cb(err);
+        }
+        var bool = false;
+        for(u of t.info.likesList) {
+            if(username===u) {
+                bool = true;
+            }
+        }
+        if(bool) {
+            t.likesCount--;
+            t.info.likesList.remove(username);
+            t.save(cb);
+        } else {
+            cb("didn't like!");
+        }
+    })
+};
+
+// module.exports.dislikeTweet = function(username,tweetId,cb) {
+//     Tweet.findById(tweetId, function(err,t) {
+//         if(err) {
+//             cb(err);
+//         }
+//         var bool = true;
+//         for(u of t.info
+//     })
+// };
