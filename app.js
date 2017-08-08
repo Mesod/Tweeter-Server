@@ -8,6 +8,7 @@ var db = require('./db/db');
 var register = require('./routes/register');
 var login = require('./routes/login');
 var tweets = require('./routes/tweets');
+var interaction = require('./routes/interaction');
 
 var app = express();
 
@@ -36,6 +37,7 @@ app.use(cookieParser());
 app.use('/api/register', register);
 app.use('/api/login', login);
 app.use('/api/tweets', tweets);
+app.use('/api/interaction', interaction);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

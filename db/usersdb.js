@@ -36,7 +36,31 @@ module.exports.newUser = function(userInfo, callback) {
 
 }
 
-//TODO: 1- getUserByUsername    2- comparePassword
+module.exports.followUser = function(username, followedUsername, callback) {
+    var query = {userName:[username,followedUsername]};
+    userSchema.find(query, function (err, user) {
+        if(err) {
+            callback("error in db!");
+        }
+        console.log(user.length);
+        if(user.length!=2) {
+            callback("error");
+        }
+        if(user[0].userName==username) {
+            user[0].info.following.count++;
+            user[0].info.following.list.push(followedUsername);
+            user[1].info.followers.count++;
+            user[1].info.followers.list.push(username);
+        } else {
+            user[1].info.following.count++;
+            user[1].info.following.list.push(followedUsername);
+            user[0].info.followers.count++;
+            user[0].info.followers.list.push(username);
+        }
+        user[1].save();
+        user[0].save();
+    });
+}
 
 module.exports.getUserByUsername = function(username, callback) {
     var query = {userName: username};

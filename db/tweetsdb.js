@@ -10,7 +10,6 @@ module.exports.newTweet = function(newTweet,cb) {
 
 module.exports.getUsersTweet = function (username, cb) {
     Tweet.find({authorUsername:username},{info:0}).exec(cb);
-
 };
 
 module.exports.likeTweet = function(username, tweetId, cb) {
