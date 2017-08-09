@@ -26,7 +26,7 @@ router.post('/', function(req, res, next) {
     } else {
         udb.newUser(user,function(err) {
             if(err) {
-                res.json({error:err});
+                res.json({status:"error",detail:err});
                 res.end();
             } else {
                 res.json({status:"registered"});

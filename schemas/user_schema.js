@@ -9,7 +9,7 @@ module.exports = mongoose.model('User', {
         unique: true
     },
     password: String,
-    screenName: String,
+    // screenName: String,
     emailAddress: String,
     info: {
         registerDate: {
