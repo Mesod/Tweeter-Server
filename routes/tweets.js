@@ -58,6 +58,17 @@ router.get('/dislike/:tweetId', requireAuth, function (req,res) {
         }
         res.end();
     });
+});
+
+router.get('/getUsersPosts/:username', requireAuth, (req,res)=> {
+    tdb.getUsersTweet(req.params.usernames,function(err, tweets){
+        if(err) {
+            res.json({"status":"error"});
+        } else {
+            res.json(tweets);
+        }
+        res.end();
+    });
 })
 
 module.exports = router;
