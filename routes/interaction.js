@@ -8,16 +8,22 @@ const requireAuth = passport.authenticate('jwt', { session: false });
 
 /* GET home page. */
 router.get('/followUser/:username', requireAuth, function(req, res, next) {
-    console.log('here!');
     var followedUsername = req.params.username;
     var username = req.user.userName;
+    if(username == followedUsername) {
+        res.json({status:'error',detail:'one does not follow itself!'});
+        res.end();
+        return;
+    }
     udb.followUser(username,followedUsername,function(err) {
         if(err) {
-            console.log(err);
+            res.json({status:'error',detail:err});
+        } else {
+            res.json({status: 'success'});
         }
-        res.json({status:'success'});
         res.end();
     });
 });
+
 
 module.exports = router;

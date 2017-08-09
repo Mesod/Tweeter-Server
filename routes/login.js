@@ -20,7 +20,7 @@ function setUserInfo(request) {
     return {
         _id: request._id,
         username: request.userName
-    };
+    }
 }
 
 router.post('/', requireLogin, function(req, res, next) {

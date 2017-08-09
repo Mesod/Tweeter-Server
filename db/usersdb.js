@@ -3,6 +3,7 @@
  */
 var userSchema = require('../schemas/user_schema');
 var bcrypt = require('bcrypt');
+var co = require('co');
 
 var uniqueUserName = function(username,callback) {
     userSchema.count({userName: username}, function(err, count) {
@@ -40,25 +41,57 @@ module.exports.followUser = function(username, followedUsername, callback) {
     var query = {userName:[username,followedUsername]};
     userSchema.find(query, function (err, user) {
         if(err) {
-            callback("error in db!");
+            return callback("db connection!");
         }
-        console.log(user.length);
+        // console.log(user.length);
+        var u1, u2;
         if(user.length!=2) {
-            callback("error");
-        }
-        if(user[0].userName==username) {
-            user[0].info.following.count++;
-            user[0].info.following.list.push(followedUsername);
-            user[1].info.followers.count++;
-            user[1].info.followers.list.push(username);
+            return callback("user(s) not found!")
         } else {
-            user[1].info.following.count++;
-            user[1].info.following.list.push(followedUsername);
-            user[0].info.followers.count++;
-            user[0].info.followers.list.push(username);
+            if(user[0].userName==username) {
+                u1 = 0;
+                u2 = 1;
+                if(user[0].info.following.list.indexOf(followedUsername) == -1) {
+                    user[0].info.following.count++;
+                    user[0].info.following.list.push(followedUsername);
+                    user[1].info.followers.count++;
+                    user[1].info.followers.list.push(username);
+                }
+                else {
+                    return callback("already followed");
+                }
+            } else {
+                u1 = 1;
+                u2 = 0;
+                if(user[1].info.following.list.indexOf(followedUsername) == -1) {
+                    user[1].info.following.count++;
+                    user[1].info.following.list.push(followedUsername);
+                    user[0].info.followers.count++;
+                    user[0].info.followers.list.push(username);
+                }
+                else {
+                    return callback("already followed");
+                }
+            }
+            co(function* () {
+                var p1 = yield user[0].save();
+                var p2 = yield user[1].save();
+                return callback(null);
+            }).catch(
+                (err)=> {
+                    if(user[u1].info.following.list.indexOf(followedUsername) != -1) {
+                        user[u1].info.following.list.remove[followedUsername];
+                        user[u1].info.following.count--;
+                    }
+                    if(user[u2].info.followers.list.indexOf(username) != -1) {
+                        user[u2].info.followers.list.remove(username);
+                        user[u2].info.followers.count--;
+                    }
+                    return callback("saving error");
+                }
+            );
         }
-        user[1].save();
-        user[0].save();
+
     });
 }
 
