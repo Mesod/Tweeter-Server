@@ -1,0 +1,18 @@
+/api:
+	/register:
+		/ - POST - {username, emailaddress, password, password2}
+
+	/login:
+		/ - POST - {username, password}
+	
+	/tweets(requires JWT):
+		/new - POST - {text}
+		/gerUsersOwnPosts - GET
+		/getUsersPosts/:username - GET
+		/like/:tweetId - GET 
+		/dislike/:tweetId - GET
+	
+	/interaction:
+		/follow/:username - GET
+		/unfollow/:username - GET
+
